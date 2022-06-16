@@ -1,0 +1,71 @@
+﻿@model List<Person>
+
+@{
+    ViewData["Title"] = "Member List";
+}
+
+<div>
+    <h1 class="display-4 text-center">@ViewData["Title"]</h1>
+    <a class="btn btn-primary text-left my-3" asp-controller="Rookie" asp-action="Create">Create new member</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col" class="text-left">First Name</th>
+                <th scope="col" class="text-left">Last Name</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Date Of Birth</th>
+                <th scope="col" class="text-left">Full Name</th>
+                <th scope="col" class="text-left">Phone Number</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <th scope="row">@(i+1)</th>
+                    <td class="text-left">@Model[i].FirstName</td>
+                    <td class="text-left">@Model[i].LastName</td>
+                    <td>@Model[i].Gender</td>
+                    <td>@Model[i].DateOfBirth.ToString("dd/MM/yyyy")</td>
+                    <td class="text-left">
+                        <a asp-controller="Rookie" asp-action="Details" asp-route-index="@i">@Model[i].FullName</a>
+                    </td>
+                    <td class="text-left">@Model[i].PhoneNumber</td>
+                    <td>
+                        <a asp-controller="Rookie" asp-action="Edit" class="btn btn-link text-info font-weight-bold"
+                        asp-route-index=@i>Edit</a>
+                        <a class="btn btn-link text-danger font-weight-bold" href="javascript:void(0)" onclick="PassRowIndexToConfimrModal(@i)" data-toggle="modal"
+                        data-target="#deleteConfirmationModal">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- delete confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" asp-controller="Rookie" asp-action="Delete">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to delete this member ?
+                </div>
+                <div class="modal-footer">
+                    <input id="index" name="index" type="hidden" value="" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">OK</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
